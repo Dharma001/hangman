@@ -116,12 +116,19 @@ if __name__ == "__main__":
         title = font.render('HANGMAN', True, BLACK)
         screen.blit(title, (WIDTH//2 - title.get_width()//2, 60))
         prompt = small_font.render('Select Level:', True, BLACK)
-        screen.blit(prompt, (WIDTH//2 - prompt.get_width()//2, 180))
-        levels = [('1', 'Basic (Word)'), ('2', 'Intermediate (Phrase)'), ('3', 'Hard (Expert)')]
-        for idx, (key, label) in enumerate(levels):
+        screen.blit(prompt, (WIDTH//2 - prompt.get_width()//2, 160))
+        levels = [
+            ('1', 'Basic', 'Word'),
+            ('2', 'Intermediate', 'Phrase'),
+            ('3', 'Hard', 'Expert')
+        ]
+        for idx, (key, name, desc) in enumerate(levels):
             color = (0,128,0) if selected == key else BLACK
-            surf = small_font.render(f'{key}: {label}', True, color)
-            screen.blit(surf, (WIDTH//2 - surf.get_width()//2, 240 + idx*60))
+            surf = small_font.render(f'{key}: {name}  ({desc})', True, color)
+            pygame.draw.rect(screen, (200,200,200) if selected == key else (240,240,240), (WIDTH//2-160, 220+idx*70, 320, 50), border_radius=12)
+            screen.blit(surf, (WIDTH//2 - surf.get_width()//2, 230 + idx*70))
+        info = small_font.render('Press 1, 2, or 3 to choose', True, GRAY)
+        screen.blit(info, (WIDTH//2 - info.get_width()//2, 450))
         pygame.display.flip()
 
     selecting_level = True
@@ -185,6 +192,10 @@ if __name__ == "__main__":
     def draw_ui():
         title = font.render('HANGMAN', True, BLACK)
         screen.blit(title, (WIDTH//2 - title.get_width()//2, 20))
+        # Show current level at the top left
+        level_map = {'basic': 'Basic', 'intermediate': 'Intermediate', 'hard': 'Hard'}
+        level_display = small_font.render(f'Level: {level_map.get(game.level, game.level).capitalize()}', True, BLACK)
+        screen.blit(level_display, (20, 20))
         y_start = HEIGHT - 180
         word_surface = small_font.render(game.get_display_word(), True, BLACK)
         screen.blit(word_surface, (WIDTH//2 - word_surface.get_width()//2, y_start))
